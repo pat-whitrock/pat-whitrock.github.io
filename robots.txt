@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://pat-whitrock.github.io/sitemap.xml 
