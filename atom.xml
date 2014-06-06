@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Generate Rent]]></title>
   <link href="http://pat-whitrock.github.io/atom.xml" rel="self"/>
   <link href="http://pat-whitrock.github.io/"/>
-  <updated>2014-06-05T20:49:52-04:00</updated>
+  <updated>2014-06-05T21:07:54-04:00</updated>
   <id>http://pat-whitrock.github.io/</id>
   <author>
     <name><![CDATA[Pat Whitrock]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git for Non-Programmers]]></title>
+    <link href="http://pat-whitrock.github.io/blog/2014/02/27/git-for-non-programmers/"/>
+    <updated>2014-02-27T19:51:38-05:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/02/27/git-for-non-programmers</id>
+    <content type="html"><![CDATA[<p>Git is an amazing tool for collaboration and version control, but its merits are largely unknown to the general public. Over the past few years, amazing collaborative tools (e.g. Google Drive) have become popular for word processing, spreadsheets and other common needs for the average person. However, these tools don’t offer sophisticated version control — they are limited to moving linearly backwards and forwards a certain number of steps.</p>
+
+<p>This limits our ability to create different versions of the same document to test different approaches to a problem or work on the same content at the same time without stepping on each other’s feet or creating entirely new files. Any non-developer who has worked in a normal office setting has probably encountered a project that quickly devolved into folders containing timestamped versions of the same file. If you’re like me, you probably thought putting that on a shared drive in the cloud put you one step ahead of the game. Sadly, that’s probably true, but that’s no excuse not to step up your game some more with Git. That’s right — Git can handle more than just code.</p>
+
+<p>This may seem like a crazy idea — Git wasn’t created to handle spreadsheets or word processing. Well, you know what sounds even crazier? Having a ton of folders with timestamped files on everyone’s hard drive! Using <code>git add</code>, <code>commit</code>, <code>branch</code>, <code>merge</code> and <code>push</code> is simple to learn and comes with a number of added benefits.</p>
+
+<h3>Version Control for Spreadsheets</h3>
+
+<p>Let’s try out some version control in MS Excel. We’ll start out by creating a simple spreadsheet as an XLSX (Excel’s modern default filetype), an XLS (preceded XLSX) and a CSV (comma-separated values). For each set of changes, we’ll create a new branch, add and commit our changes, then switch back to our master branch and merge the two.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*dbNPHgeMBz6ByWCnXA75Jg.png" alt="Original .xls, .xlsx &amp; .csv files" /></p>
+
+<p>First, let’s try making some simple edits to our spreadsheets. To start off, we’ll make some small edits and delete a row.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*ISkg5HyYMI1U1f2rJBU4Nw.png" alt="Text-edited .xls, .xlsx &amp; .csv files" /></p>
+
+<p>No problems here. Next, let’s try something a bit more advanced. We’ll be adding some simple formulas (not in our CSV, it doesn’t support formulas).</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*G-XhUMnrDCmE84l6RfMDmw.png" alt="Formula-edited .xls &amp;.xlsx files" /></p>
+
+<p>Still good! One more quick test — let’s see what happens when we edit some styles, like text color and background color.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*9u1PbzWq9u-nHe8TP3JqCg.png" alt="Style-edited .xls &amp;.xlsx files" /></p>
+
+<p>That works, too! Awesome — Git can understand our spreadsheets well enough for us to branch off, make changes and then merge them back in.</p>
+
+<h3>Version Control for Word Processing</h3>
+
+<p>Next up, word processing. We’re going to follow that same workflow from our spreadsheets — we’ll create a new branch, add and commit our changes, then switch back to our master branch and merge the two.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*wi454P_UTyJk9M_VGbm72A.png" alt="Original .docx" /></p>
+
+<p>We’re starting out with a DOCX file — MS Word’s standard filetype. It has a few quotes in there — nothing crazy. Let’s see what happens when we remove the middle one and add a new one at the end.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*VtNtSVi2tScJ1Nmc-v39UA.png" alt="Text-edited .docx" /></p>
+
+<p>All good. If you think about it, the contents of a word document are basically the same as the contents of an HTML document — they’re both just plain text in different languages. Or at least they are until you do something else to your word doc, like change up all the spacing, text styles, colors and whatnot. Then what happens?</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*iGxrobm17YmuBxso5m1Gjw.png" alt="Style-edited .docx" /></p>
+
+<p>Well, that’s no good. Surprisingly, we were able to merge without having to resolve any conflicts, but it looks like Git made some wrong assumptions. Still, we were able to edit our content no problem. So long as we work on our content before our presentation, we should be fine.</p>
+
+<h3>Collaborative Benefits</h3>
+
+<p>We’ve really only covered Git’s version control benefits, but its collaborative features can be useful, too. If you incorprate Github into the mix, you and your collaborators have access to even more great features. For example, you could all fork and clone the same repository, work on the same file or collection of files, then push and send a pull request for your team’s leader (e.g. an editor) to review. The leader can even choose to include pieces of individual pull requests and exclude others. And he doesn’t have to download twenty versions of the same file or folder, all with the same name, and clutter his desktop.</p>
+
+<h3>Things to Keep in Mind</h3>
+
+<p>Git has its limitations. If you make a lot of drastic changes to a large file, Git might freak out and have no idea what to do, so it’ll declare basically everything a merge conflict. While this is really annoying, it’s still better than it making a bunch of assumptions and breaking your file.</p>
+
+<p>It’s good practice to separate your work on content and style. Git is built to handle changes to code, which is text. So long as your work is limited to your content, you should be fine. Also, the simpler your filetype, the easier it will be for git to manage.</p>
+
+<p>Github’s pull request interface is amazing. Unfortunately, you can’t preview pull requests for certain types of documents like DOCX, XLSX and other filetypes that most people use everyday. But, that interface might exist somewhere else — go find it! Or work your way around it by converting your file to something Github can understand.</p>
+
+<h3>TL;DR</h3>
+
+<p>Should I just timestamp a bunch of files, throw them in folders and email everyone I work with?</p>
+
+<iframe width="625" height="480" src="//www.youtube.com/embed/31g0YE61PLQ" frameborder="0" allowfullscreen></iframe>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Logic Behind Logical Operators]]></title>

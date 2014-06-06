@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rails Generate Rent</title>
+  <title>Git for Non-Programmers - Rails Generate Rent</title>
   <meta name="author" content="Pat Whitrock">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://pat-whitrock.github.io">
+  <link rel="canonical" href="http://pat-whitrock.github.io/blog/2014/02/27/git-for-non-programmers">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Rails Generate Rent" type="application/atom+xml">
@@ -65,15 +65,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/02/27/git-for-non-programmers/">Git for Non-Programmers</a></h1>
+      <h1 class="entry-title">Git for Non-Programmers</h1>
     
     
       <p class="meta">
@@ -96,7 +93,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Git is an amazing tool for collaboration and version control, but its merits are largely unknown to the general public. Over the past few years, amazing collaborative tools (e.g. Google Drive) have become popular for word processing, spreadsheets and other common needs for the average person. However, these tools don’t offer sophisticated version control — they are limited to moving linearly backwards and forwards a certain number of steps.</p>
+<div class="entry-content"><p>Git is an amazing tool for collaboration and version control, but its merits are largely unknown to the general public. Over the past few years, amazing collaborative tools (e.g. Google Drive) have become popular for word processing, spreadsheets and other common needs for the average person. However, these tools don’t offer sophisticated version control — they are limited to moving linearly backwards and forwards a certain number of steps.</p>
 
 <p>This limits our ability to create different versions of the same document to test different approaches to a problem or work on the same content at the same time without stepping on each other’s feet or creating entirely new files. Any non-developer who has worked in a normal office setting has probably encountered a project that quickly devolved into folders containing timestamped versions of the same file. If you’re like me, you probably thought putting that on a shared drive in the cloud put you one step ahead of the game. Sadly, that’s probably true, but that’s no excuse not to step up your game some more with Git. That’s right — Git can handle more than just code.</p>
 
@@ -157,22 +154,16 @@
 <iframe width="625" height="480" src="//www.youtube.com/embed/31g0YE61PLQ" frameborder="0" allowfullscreen></iframe>
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/13/the-logic-behind-logical-operators/">The Logic Behind Logical Operators</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pat Whitrock</span></span>
+
+      
 
 
 
@@ -184,100 +175,32 @@
   
 
 
-<time datetime="2014-02-13T17:26:23-05:00" pubdate data-updated="true">Feb 13<span>th</span>, 2014</time>
-        
-      </p>
+<time datetime="2014-02-27T19:51:38-05:00" pubdate data-updated="true">Feb 27<span>th</span>, 2014</time>
+      
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://pat-whitrock.github.io/blog/2014/02/27/git-for-non-programmers/" data-via="@DIS_IS_PATRICK" data-counturl="http://pat-whitrock.github.io/blog/2014/02/27/git-for-non-programmers/" >Tweet</a>
+  
+  
+  
+</div>
 
-
-  <div class="entry-content"><p>One of the most compelling aspects of the Ruby language is the sweetness of its syntactic sugar. This made the almost ubiquitous use of the <code>&amp;&amp;</code> and <code>||</code> operators over their semantically pleasing counterparts and and or all the more surprising to me. It turns out the two sets of operators are actually different in a meaningful way.</p>
-
-<h3>So what’s the difference?</h3>
-
-<p><strong>Precedence</strong>. Huh? Precedence is the same as <strong>Order of Operations</strong>. Remember <strong>PEMDAS</strong> from grade school? It’s that acronym for <strong>P</strong>arentheses, <strong>E</strong>xponents, <strong>M</strong>ultiplication, <strong>D</strong>ivision, <strong>A</strong>ddition, <strong>S</strong>ubtraction. The operators at the beginning of <strong>PEMDAS</strong> (parentheses) are considered first, then the next (exponents), and so on. Operator precedence in Ruby and other programming languages works the same way — there are just more operators. Got it? Got it. Moving on…</p>
-
-<p><code>&amp;&amp;</code> and <code>||</code> have a higher precedence than <em>and</em> and <em>or</em>. This means Ruby will consider them first. Seems kind of harmless as long as we’re not mixing the two sets of operators (e.g. using <code>&amp;&amp;</code> and <code>or</code>) in the same expression, but the real problem doesn’t lie at either of these levels of precedence. The troublesome area is the space between.</p>
-
-<p>Assignment operators fall below <code>&amp;&amp;</code> and <code>||</code>, but above and and or. This starts to cause all sorts of problems when we use the latter because expressions stop behaving the way we assume they should.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">value</span> <span class="o">=</span> <span class="kp">false</span> <span class="o">||</span> <span class="kp">true</span>  <span class="c1"># (value) = (false || true)</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">true</span>
-</span><span class='line'><span class="n">value</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">true</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">value</span> <span class="o">=</span> <span class="kp">false</span> <span class="ow">or</span> <span class="kp">true</span>  <span class="c1"># (value = false) or (true)</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">true</span>
-</span><span class='line'><span class="n">value</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let’s say we want to compare two values and assign their return value to a variable. The first set of operations occurs how we expect. The expression <code>false || true</code> returns <code>true</code>. Then <code>true</code> is assigned to <code>value</code>. The second set of operations looks like it should do the same, but it doesn’t. The <code>=</code> assignment operator has the highest precedence, so <code>false</code> is assigned to <code>value</code>. Then <code>value</code> is compared to <code>true</code> via the <code>or</code> operator. This returns <code>true</code>, but <code>value</code> returns false, which wasn’t our intention.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">value</span> <span class="o">=</span> <span class="kp">true</span> <span class="o">&amp;&amp;</span> <span class="kp">false</span>  <span class="c1"># (value) = (true &amp;&amp; false)</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">false</span>
-</span><span class='line'><span class="n">value</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">false</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">value</span> <span class="o">=</span> <span class="kp">true</span> <span class="ow">and</span> <span class="kp">false</span>  <span class="c1"># (value = true) and (false)</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">false</span>
-</span><span class='line'><span class="n">value</span>
-</span><span class='line'>  <span class="o">=&gt;</span> <span class="kp">true</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We encounter the same problem with the code above.</p>
-
-<p>There’s another key difference between these two sets of operators. <code>&amp;&amp;</code> is actually one level of precedence higher than <code>||</code>, whereas and and or share their level of precedence. I assume this is the case because of the assumption that we are more likely to compare chains of <code>&amp;&amp;</code> expressions with the <code>||</code> operator than vice versa because the former has more practical implementations. <code>and</code> and <code>or</code> have identical precedence, so their expressions are executed in the order in which they occur, which is rarely our intention.</p>
-
-<h3>Cool, I get how it works. Now I can use and and or, right?</h3>
-
-<p>Wrong. Why would you do that to yourself? Because it’s prettier? Unless you’re writing specific types of expressions, you’ll have to resort to using unnecessary parentheses. Gross.</p>
-
-<p>Because you just read this awesome blog post and now you know how they work? Well, did everyone you know read this blog post? I didn’t think so. Even if you know your code does one thing, your collaborators will probably assume it does something else.</p>
-
-<h3>TL;DR</h3>
-
-<ol>
-<li><code>&amp;&amp;</code> and <code>||</code> have a higher precedence than <code>and</code> and <code>or</code>.</li>
-<li>Assignment operators, like =, have a lower precedence than <code>&amp;&amp;</code> and <code>||</code> (good), but higher than <code>and</code> and <code>or</code> (bad).</li>
-<li><code>&amp;&amp;</code> has higher precedence than <code>||</code> (good). <code>and</code> and <code>or</code> have the same (bad).</li>
-<li>Using <code>&amp;&amp;</code> and <code>||</code> is the convention for a reason. Don’t be that guy.</li>
-<li>If you get confused, just use parentheses. Parentheses are your friends. Make it work now. Refactor later.</li>
-</ol>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/13/the-logic-behind-logical-operators/" title="Previous Post: The Logic Behind Logical Operators">&laquo; The Logic Behind Logical Operators</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -298,7 +221,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/pat-whitrock">@pat-whitrock</a> on GitHub
@@ -339,6 +262,7 @@
 
   
 </aside>
+
 
     </div>
   </div>
