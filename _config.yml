@@ -7,7 +7,7 @@ title: Rails Generate Rent
 subtitle: Thoughts on building Internets
 author: Pat Whitrock
 simple_search: https://www.google.com/search
-description: I'm a musician turned full-stack developer living in NYC. Before studying code at <a href="http://flatironschool.com/">The Flatiron School</a> I attended <a href="http://www.nyu.edu/">NYU</a> and worked at music startups like <a href="https://www.nextbigsound.com/">Next Big Sound</a> and <a href="https://www.songtrust.com/">Songtrust</a>. I care about creating innovative products with great user experiences.
+description: I'm a musician turned full-stack developer living in NYC. Before studying code at <a href="http://flatironschool.com/">The Flatiron School</a> I attended <a href="http://www.nyu.edu/">NYU</a> and worked at music startups like <a href="https://www.nextbigsound.com/">Next Big Sound</a> and <a href="https://www.songtrust.com/">Songtrust</a>. I care about creating innovative products with great user experiences.<br><br><a href="/portfolio">Check out my portfolio</a><br><br>Past projects include <a href="http://gitshoes.com/">GitShoes</a> (connecting user feedback to your GitHub repo) and <a href="http://gemit.us/">GemIt</a> (a non-technical interface for creating scraping gems).
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
