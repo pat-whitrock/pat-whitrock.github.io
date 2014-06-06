@@ -8,6 +8,7 @@ categories:
 ---
 
 A couple weeks ago, I was scraping Wikipedia and hit a wall while I was parsing the data. I eventually traced my errors back to my parser, which was failing to split a string on a space I knew should be present in each iteration. I dug further, and eventually isolated the iteration causing the failure. I copy and pasted the string into IRB to test the split myself and, as expected, the string couldn’t be split on the space. *But the space did exist*. It was there. I could see it. I tried writing the same string out by hand and splitting it. That worked.
+<!--more-->
 
 ![My brain is full of fuck](https://d262ilb51hltx0.cloudfront.net/max/1000/1*O7CIpHjHmv7AvIY6n1izdA.png)
 

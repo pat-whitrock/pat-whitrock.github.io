@@ -12,6 +12,7 @@ Recursion is one of those classic computer science topics. It’s an interview f
 ### How not to use recursion
 
 If used incorrectly, recursion can be dangerous. Not all problems are meant to be solved recursively. Common pitfalls include infinite loops (if you fail to provide termination conditions), memory errors and stack overflows (if the function is deep and memory intensive). All of these issues are avoidable if you follow one rule: don’t use recursion for the sake of using recursion. In addition to the pitfalls above, irresponsible use of recursion can be much slower and more cryptic than iterative solutions.
+<!--more-->
 
 ### When to use recursion
 

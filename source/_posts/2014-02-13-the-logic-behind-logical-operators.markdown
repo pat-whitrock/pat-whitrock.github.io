@@ -12,6 +12,7 @@ One of the most compelling aspects of the Ruby language is the sweetness of its 
 ### So what’s the difference?
 
 **Precedence**. Huh? Precedence is the same as **Order of Operations**. Remember **PEMDAS** from grade school? It’s that acronym for **P**arentheses, **E**xponents, **M**ultiplication, **D**ivision, **A**ddition, **S**ubtraction. The operators at the beginning of **PEMDAS** (parentheses) are considered first, then the next (exponents), and so on. Operator precedence in Ruby and other programming languages works the same way — there are just more operators. Got it? Got it. Moving on…
+<!--more-->
 
 `&&` and `||` have a higher precedence than *and* and *or*. This means Ruby will consider them first. Seems kind of harmless as long as we’re not mixing the two sets of operators (e.g. using `&&` and `or`) in the same expression, but the real problem doesn’t lie at either of these levels of precedence. The troublesome area is the space between.
 

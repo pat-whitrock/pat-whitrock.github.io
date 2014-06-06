@@ -27,6 +27,7 @@ function pam() {
 }
 pam();
 ```
+<!--more-->
 
 ![](https://d262ilb51hltx0.cloudfront.net/max/800/1*fW56jkMiYfLxUUlf2L5Opw.png)
 

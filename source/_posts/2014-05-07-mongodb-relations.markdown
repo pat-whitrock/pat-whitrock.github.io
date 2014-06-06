@@ -14,6 +14,7 @@ Mongo’s relations are the NoSQL equivalent of associations found in relational
 Relations associate data from one model with data from another model. On a high level, this is precisely what RDBMS associations are for. However, the way in which data is associated in NoSQL is quite different.
 
 In traditional relational databases, associations are used to relate data from one table to another. MongoDB and similar NoSQL databases are document-oriented (there are no tables), so relationships are drawn between document-objects instead.
+<!--more-->
 
 #### ActiveRecord
 

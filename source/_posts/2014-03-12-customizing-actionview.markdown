@@ -12,6 +12,7 @@ The ActionView module is an awesome part of the Rails framework. It exists to ha
 ## ActionView::Helpers
 
 If you’re developing a Rails application, you’ll most likely be making use of ActionView helpers within your templates. Rails will also be utilizing these helpers to create associations between different parts of your application based solely on naming conventions. ActionView is largely responsible for the power of the Rails framework that is provided by prioritizing convention over customization.
+<!--more-->
 
 ### Pluralization is awesome
 

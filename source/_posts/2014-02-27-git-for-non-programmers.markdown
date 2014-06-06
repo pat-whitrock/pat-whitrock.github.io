@@ -8,6 +8,7 @@ categories:
 ---
 
 Git is an amazing tool for collaboration and version control, but its merits are largely unknown to the general public. Over the past few years, amazing collaborative tools (e.g. Google Drive) have become popular for word processing, spreadsheets and other common needs for the average person. However, these tools don’t offer sophisticated version control — they are limited to moving linearly backwards and forwards a certain number of steps.
+<!--more-->
 
 This limits our ability to create different versions of the same document to test different approaches to a problem or work on the same content at the same time without stepping on each other’s feet or creating entirely new files. Any non-developer who has worked in a normal office setting has probably encountered a project that quickly devolved into folders containing timestamped versions of the same file. If you’re like me, you probably thought putting that on a shared drive in the cloud put you one step ahead of the game. Sadly, that’s probably true, but that’s no excuse not to step up your game some more with Git. That’s right — Git can handle more than just code.
 

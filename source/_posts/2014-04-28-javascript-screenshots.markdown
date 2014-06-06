@@ -12,6 +12,7 @@ One of my current projects — [GitShoes](http://www.gitshoes.com/ — t
 > “A picture is worth a thousand words.”
 
 Our average issue was about 20-30 words long. So, if a picture is worth 1000 words, that means taking some quick screenshots at issue submission would make our app about 40x more useful. Seems like a no-brainer feature to me. But how do we make it happen?
+<!--more-->
 
 ### Screenshots aren’t built into JavaScript
 
