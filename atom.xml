@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Generate Rent]]></title>
   <link href="http://pat-whitrock.github.io/atom.xml" rel="self"/>
   <link href="http://pat-whitrock.github.io/"/>
-  <updated>2014-06-05T21:07:54-04:00</updated>
+  <updated>2014-06-06T00:15:34-04:00</updated>
   <id>http://pat-whitrock.github.io/</id>
   <author>
     <name><![CDATA[Pat Whitrock]]></name>
@@ -12,6 +12,159 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Customizing ActionView]]></title>
+    <link href="http://pat-whitrock.github.io/blog/2014/03/12/customizing-actionview/"/>
+    <updated>2014-03-12T23:53:03-04:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/03/12/customizing-actionview</id>
+    <content type="html"><![CDATA[<p>The ActionView module is an awesome part of the Rails framework. It exists to handle template lookup and rendering and provides several helpers allowing you to minimize the back-and-forth between Ruby and HTML in your ERB templates.</p>
+
+<h2>ActionView::Helpers</h2>
+
+<p>If you’re developing a Rails application, you’ll most likely be making use of ActionView helpers within your templates. Rails will also be utilizing these helpers to create associations between different parts of your application based solely on naming conventions. ActionView is largely responsible for the power of the Rails framework that is provided by prioritizing convention over customization.</p>
+
+<h3>Pluralization is awesome</h3>
+
+<p>ActionView has some awesome methods, but pluralize is probably the most common and immediately useful helpers. It does precisely what it seems — it provides the plural version of a given word.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;Dunder Mifflin has </span><span class="si">#{</span><span class="n">pluralize</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;employee&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="no">Dunder</span> <span class="no">Mifflin</span> <span class="n">has</span> <span class="mi">4</span> <span class="n">employees</span><span class="o">.</span>
+</span><span class='line'><span class="s2">&quot;Michael Scott Paper Company has </span><span class="si">#{</span><span class="n">pluralize</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;employee&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="no">Michael</span> <span class="no">Scott</span> <span class="no">Paper</span> <span class="no">Company</span> <span class="n">has</span> <span class="mi">1</span> <span class="n">employee</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pluralize accounts for the dynamic nature of data-driven applications. The code above will use the correct version of a given word, without having to fill our templates with sloppy, repetitive code (hooray for being DRY). Without the pluralize helper, every time we use a dynamic number, we would be forced to write some code like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="no">Dundler</span> <span class="no">Mifflin</span> <span class="n">has</span> <span class="o">&lt;</span><span class="sx">%= @employees.count %&gt; &lt;%=</span>
+</span><span class='line'>  <span class="k">if</span> <span class="vi">@employees</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="s2">&quot;employee&quot;</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="s2">&quot;employees&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="sx">%&gt;&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ActionView also does a great job of handling common irregular pluralizations. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;</span><span class="si">#{</span><span class="n">pluralize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;woman&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2"> work at Dundler Mifflin.&quot;</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="s2">&quot;3 women work at Dundler Mifflin.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How convenient is that!? ActionView handles a very large number of irregular pluralizations, singularizations, even uncountables:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;movies&quot;</span><span class="o">.</span><span class="n">singularize</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="s2">&quot;movie&quot;</span>    <span class="c1"># not &quot;movy&quot;</span>
+</span><span class='line'><span class="s2">&quot;species&quot;</span><span class="o">.</span><span class="n">pluralize</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="s2">&quot;species&quot;</span>  <span class="c1"># not &quot;specieses&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>But sometimes it breaks</h3>
+
+<p>Unfortunately, there are some edge cases — untracked irregular pluralizations and words with multiple acceptable pluralizations, which often rely on context or personal preference. When I noticed that some common pluralizations, weren’t being caught by pluralize, I had the same thought I’m sure many programming students have had:</p>
+
+<blockquote><p>Submit a pull request to Rails!</p></blockquote>
+
+<p>But first, I have to find which file I would find this relationship in, so I can actually make the change. And <a href="https://github.com/rails/rails/blob/92f567ab30f240a1de152061a6eee76ca6c4da86/activesupport/lib/active_support/inflections.rb">here</a> it is. Turns out, the inflection rules have been frozen to prevent applications that rely on relationships won’t break.</p>
+
+<iframe width="770" height="480" src="//www.youtube.com/embed/WWaLxFIVX1s" frameborder="0" allowfullscreen></iframe>
+
+
+<h3>Luckily we can fix it</h3>
+
+<p>For example, ActionView incorrectly assumes <em>human</em> should be pluralized to <em>humen</em>. We can override this using the <a href="https://github.com/rails/rails/blob/4e327225947b933d5434509e02e98226c581adc1/activesupport/lib/active_support/inflector/inflections.rb#L128">irregular</a> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;human&quot;</span><span class="o">.</span><span class="n">pluralize</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="s2">&quot;humen&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">ActiveSupport</span><span class="p">:</span><span class="ss">:Inflector</span><span class="o">.</span><span class="n">inflections</span> <span class="k">do</span> <span class="o">|</span><span class="n">inflect</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">inflect</span><span class="o">.</span><span class="n">irregular</span> <span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;humans&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;human&quot;</span><span class="o">.</span><span class="n">pluralize</span>
+</span><span class='line'> <span class="o">=&gt;</span> <span class="s2">&quot;humans&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you’re using a word with identical singular and plural spelling — or if it has pluralizations for both a collection and multiple instances and you would prefer to use the latter — you should make use of the <a href="https://github.com/rails/rails/blob/4e327225947b933d5434509e02e98226c581adc1/activesupport/lib/active_support/inflector/inflections.rb#L162">uncountable</a> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;candy&quot;</span><span class="o">.</span><span class="n">pluralize</span>
+</span><span class='line'> <span class="o">=&gt;</span> <span class="s2">&quot;candies&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;gossip&quot;</span><span class="o">.</span><span class="n">pluralize</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;gossips&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">ActiveSupport</span><span class="p">:</span><span class="ss">:Inflector</span><span class="o">.</span><span class="n">inflections</span> <span class="k">do</span> <span class="o">|</span><span class="n">inflect</span><span class="o">|</span>
+</span><span class='line'> <span class="n">inflect</span><span class="o">.</span><span class="n">uncountable</span> <span class="s2">&quot;candy&quot;</span><span class="p">,</span> <span class="s2">&quot;gossip&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;candy&quot;</span><span class="o">.</span><span class="n">pluralize</span>
+</span><span class='line'> <span class="o">=&gt;</span> <span class="s2">&quot;candy&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;gossip&quot;</span><span class="o">.</span><span class="n">pluralize</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;gossip&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Unlike the <code>plural</code> method, which creates a link between the singular and plural versions of a word, <code>uncountable</code> actually adds the word (or words if multiple arguments are passed in) to an <code>@uncountables</code> array, which contains each word ActionView will consider to have equivalent singular and equal spellings. The array begins with <a href="https://github.com/rails/rails/blob/92f567ab30f240a1de152061a6eee76ca6c4da86/activesupport/lib/active_support/inflections.rb#L68">10 words</a>, but you can add to it as you see fit.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@uncountables</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;equipment&quot;</span><span class="p">,</span> <span class="s2">&quot;information&quot;</span><span class="p">,</span> <span class="s2">&quot;rice&quot;</span><span class="p">,</span> <span class="s2">&quot;money&quot;</span><span class="p">,</span> <span class="s2">&quot;species&quot;</span><span class="p">,</span> <span class="s2">&quot;series&quot;</span><span class="p">,</span> <span class="s2">&quot;fish&quot;</span><span class="p">,</span> <span class="s2">&quot;sheep&quot;</span><span class="p">,</span> <span class="s2">&quot;jeans&quot;</span><span class="p">,</span> <span class="s2">&quot;police&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>When is customization worth it?</h3>
+
+<p>If you find ActionView doesn’t properly singularize or pluralize a commonly used word within your application, it is definitely in your best interest to manually create its singular and plural states. If something within your domain model that will warrant its own model, table, views and controller isn’t being properly handled by ActionView, you should manually amend ActionView to perceive the relationship as you see fit. This will allow you to stay DRY and utilize the full capacity of ActiveRecord associations.</p>
+
+<p>Happy pluralizing.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git for Non-Programmers]]></title>
@@ -76,7 +229,7 @@
 
 <p>Should I just timestamp a bunch of files, throw them in folders and email everyone I work with?</p>
 
-<iframe width="625" height="480" src="//www.youtube.com/embed/31g0YE61PLQ" frameborder="0" allowfullscreen></iframe>
+<iframe width="770" height="480" src="//www.youtube.com/embed/31g0YE61PLQ" frameborder="0" allowfullscreen></iframe>
 
 ]]></content>
   </entry>
