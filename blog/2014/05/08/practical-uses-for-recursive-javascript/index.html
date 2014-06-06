@@ -1,0 +1,379 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Practical Uses for Recursive Javascript - Rails Generate Rent</title>
+  <meta name="author" content="Pat Whitrock">
+
+  
+  <meta name="description" content="Recursion is one of those classic computer science topics. It’s an interview favorite and often intimidating to beginner programmers. Recursion can &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://pat-whitrock.github.io/blog/2014/05/08/practical-uses-for-recursive-javascript">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Generate Rent" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rails Generate Rent</a></h1>
+  
+    <h2>Pat Whitrock's Technical Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="patrick.whitrock@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:pat-whitrock.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Practical Uses for Recursive Javascript</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-08T01:21:21-04:00" pubdate data-updated="true">May 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recursion is one of those classic computer science topics. It’s an interview favorite and often intimidating to beginner programmers. Recursion can provide elegant solutions to extremely complex problems that follow a pattern (e.g. <a href="http://en.wikipedia.org/wiki/Tower_of_Hanoi">Towers of Hanoi</a>, <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci Numbers</a>, <a href="http://en.wikipedia.org/wiki/Collatz_conjecture">Collatz Conjecture</a>).</p>
+
+<h3>How not to use recursion</h3>
+
+<p>If used incorrectly, recursion can be dangerous. Not all problems are meant to be solved recursively. Common pitfalls include infinite loops (if you fail to provide termination conditions), memory errors and stack overflows (if the function is deep and memory intensive). All of these issues are avoidable if you follow one rule: don’t use recursion for the sake of using recursion. In addition to the pitfalls above, irresponsible use of recursion can be much slower and more cryptic than iterative solutions.</p>
+
+<h3>When to use recursion</h3>
+
+<p>Recursion is helpful to know for technical interviews and answering computer science brainteasers, but it has some practical applications, too. The examples below represent valid opportunities to use recursion. However, there are a few points to take into consideration before implementing recursion.</p>
+
+<ol>
+<li>Can you implement this more easily with an iterative solution?</li>
+<li>Does the recursive solution perform better than the iterative one?</li>
+<li>Is there any possibility of your break condition never evaluating to true?</li>
+<li>Is there any risk of running out of memory?</li>
+</ol>
+
+
+<h3>Delay Timers</h3>
+
+<p>If you want to execute a function multiple times after a set period of time, recursion is a great option. Below is an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="s2">&quot;!&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">delayLoop</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">words</span><span class="p">[</span><span class="nx">n</span><span class="p">]);</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">n</span><span class="o">++</span> <span class="o">!==</span> <span class="nx">words</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">delayLoop</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">delayLoop</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The function above will print successive items from the <code>words</code> array once a second until the end is reached. Here’s how it works:</p>
+
+<ol>
+<li>Declare and define the <code>words</code> array and n counter.</li>
+<li>Declare the <code>delayLoop</code> function.</li>
+<li>Log the <em>nth</em> element of the words array to the console.</li>
+<li>Break out of the function if the <code>n</code> counter has reached the end of the <code>words</code> array.</li>
+<li>Otherwise, wait 1000 milliseconds, then call <code>delayLoop</code> recursively.</li>
+<li>Invoke <code>delayLoop</code>.</li>
+</ol>
+
+
+<h3>Search Algorithms</h3>
+
+<p>Many algorithms lend well to recursion. What if you had to work with a JSON object with a large array of alphabetically sorted properties? Iterating over the entire array from start to finish each time you want to search for an element would be terribly inefficient. Instead, you could use the sorted nature of the array to your advantage using a binary search algorithm.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">binarySearch</span><span class="p">(</span> <span class="nx">sortedValues</span><span class="p">,</span> <span class="nx">target</span> <span class="p">){</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">search</span><span class="p">(</span> <span class="nx">low</span><span class="p">,</span> <span class="nx">high</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">low</span> <span class="o">&gt;</span> <span class="nx">high</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">sortedValues</span><span class="p">[</span><span class="nx">low</span><span class="p">]</span> <span class="o">===</span> <span class="nx">target</span> <span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">low</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">sortedValues</span><span class="p">[</span><span class="nx">high</span><span class="p">]</span> <span class="o">===</span> <span class="nx">target</span> <span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">high</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">middle</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span> <span class="p">(</span> <span class="nx">low</span> <span class="o">+</span> <span class="nx">high</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="p">);</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">middleElement</span> <span class="o">=</span> <span class="nx">sortedValues</span><span class="p">[</span><span class="nx">middle</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">middleElement</span> <span class="o">&gt;</span> <span class="nx">target</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">search</span><span class="p">(</span><span class="nx">low</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">middle</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="nx">middleElement</span> <span class="o">&lt;</span> <span class="nx">target</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">search</span><span class="p">(</span><span class="nx">middle</span><span class="p">,</span> <span class="nx">high</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">middle</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">search</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">sortedValues</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">binarySearch</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="mi">4</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On a simplified level, the Binary Search Algorithm takes the following steps:</p>
+
+<ol>
+<li>Find the middle element of the given array.</li>
+<li>Break out of the function if the bottom, middle or top element is your target.</li>
+<li>If the target is less than the middle element, call the function recursively passing in the left side of the array.</li>
+<li>If the target is greater than the middle element, call the function recursively passing in the right side of the array.</li>
+</ol>
+
+
+<h3>Puzzle Solving</h3>
+
+<p>Recursion is an incredibly powerful solution for both solving puzzles and finding the optimized solution for a puzzle. Let’s say you wanted to make an unbeatable version of a board game like Connect Four or Tic-Tac-Toe. An iterative solution could potentially be very complex, as there are a number of factors to consider before making your next move. However, you could determine which move is best through a recursive algorithm that considers all possible future outcomes of the game based on all possible combinations of valid moves by both players. If your game is too complex for an accurate iterative solution and well-defined enough to prevent infinite loops and memory issues, recursion is a powerful tool.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*P1_G06fONqGAa8YuOpXWUQ.png" alt="Recursive implementation of Tic-Tac-Toe" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pat Whitrock</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-08T01:21:21-04:00" pubdate data-updated="true">May 8<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://pat-whitrock.github.io/blog/2014/05/08/practical-uses-for-recursive-javascript/" data-via="@DIS_IS_PATRICK" data-counturl="http://pat-whitrock.github.io/blog/2014/05/08/practical-uses-for-recursive-javascript/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/05/07/mongodb-relations/" title="Previous Post: MongoDB Relations">&laquo; MongoDB Relations</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/08/practical-uses-for-recursive-javascript/">Practical Uses for Recursive Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/07/mongodb-relations/">MongoDB Relations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/29/practical-uses-for-closures/">Practical Uses for Closures</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/28/javascript-screenshots/">JavaScript Screenshots</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/27/spacing-out/">Spacing Out</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/pat-whitrock">@pat-whitrock</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'pat-whitrock',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100464323688509937290?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Pat Whitrock -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

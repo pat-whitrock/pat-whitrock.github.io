@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Practical Uses for Closures - Rails Generate Rent</title>
+  <meta name="author" content="Pat Whitrock">
+
+  
+  <meta name="description" content="The closure is a powerful tool in JavaScript. It is commonly used in functional programming languages, but often misunderstood. Like other JavaScript &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://pat-whitrock.github.io/blog/2014/04/29/practical-uses-for-closures">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Generate Rent" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rails Generate Rent</a></h1>
+  
+    <h2>Pat Whitrock's Technical Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="patrick.whitrock@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:pat-whitrock.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Practical Uses for Closures</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-29T00:58:30-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The closure is a powerful tool in JavaScript. It is commonly used in functional programming languages, but often misunderstood. Like other JavaScript fundamentals, understanding closures is necessary to write expressive, concise and maintainable scripts.</p>
+
+<h3>What is a closure?</h3>
+
+<p>At first glance, a closure is simply a function defined within another function. However, the power of closures is derived from the fact that the inner function remembers the environment in which it was created. In other words, the inner function has access to the outer function’s variables and parameters.</p>
+
+<h3>What’s it look like?</h3>
+
+<p>Below is an example of a closure (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures">courtesy of Mozilla</a>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">pam</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Pam Beesly&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">displayName</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span> <span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">displayName</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">pam</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*fW56jkMiYfLxUUlf2L5Opw.png" alt="" /></p>
+
+<p>Our outer function — <code>pam</code> — does three things:</p>
+
+<ol>
+<li>Define a local variable, <code>name</code></li>
+<li>Define a function, <code>displayName</code></li>
+<li>Call <code>displayName</code></li>
+</ol>
+
+
+<p><code>displayName</code> doesn’t define any local variables, yet it is able to alert <code>name</code> because <code>name</code> has been defined in the scope in which the closure was created — that of its outer function.</p>
+
+<p>Closures can do more than just read their outer functions’ local variables — they can overwrite them, too. Observe below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">pam</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Pam Beesly&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">displayName</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span> <span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">setName</span><span class="p">(</span><span class="nx">newName</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">name</span> <span class="o">=</span> <span class="nx">newName</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">displayName</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">setName</span><span class="p">(</span><span class="s2">&quot;Pam Halpert&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">displayName</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">pam</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*fW56jkMiYfLxUUlf2L5Opw.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*NhY_TLbjc_hbkbYSG6viCw.png" alt="" /></p>
+
+<p>As we can see, closures are capable of not only reading, but also manipulating the variables of their outer functions.</p>
+
+<h3>Function factories</h3>
+
+<p>One powerful use of closures is to use the outer function as a factory for creating functions that are somehow related.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">dwightJob</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">prefix</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">title</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">sales</span> <span class="o">=</span> <span class="nx">dwightJob</span><span class="p">(</span><span class="s1">&#39;Salesman&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">manager</span> <span class="o">=</span> <span class="nx">dwightJob</span><span class="p">(</span><span class="s1">&#39;Manager&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">sales</span><span class="p">(</span><span class="s1">&#39;Top&#39;</span><span class="p">));</span>  <span class="c1">// Top Salesman</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">manager</span><span class="p">(</span><span class="s1">&#39;Assistant to the Regional&#39;</span><span class="p">));</span> <span class="c1">// Assistant to the Regional Manager</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">manager</span><span class="p">(</span><span class="s1">&#39;Regional&#39;</span><span class="p">));</span> <span class="c1">// Regional Manager</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*REtr4VND2YHsaeYQJ2uvBg.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*wMfr6N2kgKBLRIg6H4NqFw.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*_n7y7VVae0GGiQuWQMNAUw.png" alt="" /></p>
+
+<p>Using closures as function factories is a great way to keep your JavaScript DRY. Five powerful lines of code allow us to create any number of functions with similar, yet unique purposes.</p>
+
+<h3>Namespacing private functions</h3>
+
+<p>Many object-oriented languages provide the ability to declare methods as either public or private. JavaScript doesn’t have this functionality built in, but it does allow to emulate this functionality through the use of closures, which is known as the module pattern.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dwightSalary</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">salary</span> <span class="o">=</span> <span class="mi">60000</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">changeBy</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">salary</span> <span class="o">+=</span> <span class="nx">amount</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">raise</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">changeBy</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">lower</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">changeBy</span><span class="p">(</span><span class="o">-</span><span class="mi">5000</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">currentAmount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">salary</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">})();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">currentAmount</span><span class="p">());</span> <span class="c1">// $60,000</span>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">raise</span><span class="p">();</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">currentAmount</span><span class="p">());</span> <span class="c1">// $65,000</span>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">lower</span><span class="p">();</span>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">lower</span><span class="p">();</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">currentAmount</span><span class="p">());</span> <span class="c1">// $55,000</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">changeBy</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span> <span class="c1">// TypeError: undefined is not a function</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*qtX91lbv8K1--9UD52oVEQ.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*xuRESkZzYESnfTcnNgenPQ.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*yneAbAbtw8cPkOq6Z4Yj5w.png" alt="" /></p>
+
+<p>Using closures to namespace private functions keeps more general namespaces clean, preventing naming collisions. Neither the <code>salary</code> variable nor the <code>changeBy</code> function are available outside of <code>dwightSalary</code>. However, <code>raise</code>, <code>lower</code> and <code>currentAmount</code> all have access to them and can be called on <code>dwightSalary</code>.</p>
+
+<p>These are a few popular uses for closures. You’ll surely encounter closures used for other purposes, but these are a couple simple ways to incorporate closures into your code in an immediately useful way.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pat Whitrock</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-29T00:58:30-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://pat-whitrock.github.io/blog/2014/04/29/practical-uses-for-closures/" data-via="@DIS_IS_PATRICK" data-counturl="http://pat-whitrock.github.io/blog/2014/04/29/practical-uses-for-closures/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/28/javascript-screenshots/" title="Previous Post: JavaScript Screenshots">&laquo; JavaScript Screenshots</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/07/mongodb-relations/" title="Next Post: MongoDB Relations">MongoDB Relations &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/08/practical-uses-for-recursive-javascript/">Practical Uses for Recursive Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/07/mongodb-relations/">MongoDB Relations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/29/practical-uses-for-closures/">Practical Uses for Closures</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/28/javascript-screenshots/">JavaScript Screenshots</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/27/spacing-out/">Spacing Out</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/pat-whitrock">@pat-whitrock</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'pat-whitrock',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100464323688509937290?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Pat Whitrock -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

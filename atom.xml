@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Generate Rent]]></title>
   <link href="http://pat-whitrock.github.io/atom.xml" rel="self"/>
   <link href="http://pat-whitrock.github.io/"/>
-  <updated>2014-06-06T00:54:04-04:00</updated>
+  <updated>2014-06-06T01:29:41-04:00</updated>
   <id>http://pat-whitrock.github.io/</id>
   <author>
     <name><![CDATA[Pat Whitrock]]></name>
@@ -14,10 +14,500 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Practical Uses for Recursive Javascript]]></title>
+    <link href="http://pat-whitrock.github.io/blog/2014/05/08/practical-uses-for-recursive-javascript/"/>
+    <updated>2014-05-08T01:21:21-04:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/05/08/practical-uses-for-recursive-javascript</id>
+    <content type="html"><![CDATA[<p>Recursion is one of those classic computer science topics. It’s an interview favorite and often intimidating to beginner programmers. Recursion can provide elegant solutions to extremely complex problems that follow a pattern (e.g. <a href="http://en.wikipedia.org/wiki/Tower_of_Hanoi">Towers of Hanoi</a>, <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci Numbers</a>, <a href="http://en.wikipedia.org/wiki/Collatz_conjecture">Collatz Conjecture</a>).</p>
+
+<h3>How not to use recursion</h3>
+
+<p>If used incorrectly, recursion can be dangerous. Not all problems are meant to be solved recursively. Common pitfalls include infinite loops (if you fail to provide termination conditions), memory errors and stack overflows (if the function is deep and memory intensive). All of these issues are avoidable if you follow one rule: don’t use recursion for the sake of using recursion. In addition to the pitfalls above, irresponsible use of recursion can be much slower and more cryptic than iterative solutions.</p>
+
+<h3>When to use recursion</h3>
+
+<p>Recursion is helpful to know for technical interviews and answering computer science brainteasers, but it has some practical applications, too. The examples below represent valid opportunities to use recursion. However, there are a few points to take into consideration before implementing recursion.</p>
+
+<ol>
+<li>Can you implement this more easily with an iterative solution?</li>
+<li>Does the recursive solution perform better than the iterative one?</li>
+<li>Is there any possibility of your break condition never evaluating to true?</li>
+<li>Is there any risk of running out of memory?</li>
+</ol>
+
+
+<h3>Delay Timers</h3>
+
+<p>If you want to execute a function multiple times after a set period of time, recursion is a great option. Below is an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="s2">&quot;!&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">delayLoop</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">words</span><span class="p">[</span><span class="nx">n</span><span class="p">]);</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">n</span><span class="o">++</span> <span class="o">!==</span> <span class="nx">words</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">delayLoop</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">delayLoop</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The function above will print successive items from the <code>words</code> array once a second until the end is reached. Here’s how it works:</p>
+
+<ol>
+<li>Declare and define the <code>words</code> array and n counter.</li>
+<li>Declare the <code>delayLoop</code> function.</li>
+<li>Log the <em>nth</em> element of the words array to the console.</li>
+<li>Break out of the function if the <code>n</code> counter has reached the end of the <code>words</code> array.</li>
+<li>Otherwise, wait 1000 milliseconds, then call <code>delayLoop</code> recursively.</li>
+<li>Invoke <code>delayLoop</code>.</li>
+</ol>
+
+
+<h3>Search Algorithms</h3>
+
+<p>Many algorithms lend well to recursion. What if you had to work with a JSON object with a large array of alphabetically sorted properties? Iterating over the entire array from start to finish each time you want to search for an element would be terribly inefficient. Instead, you could use the sorted nature of the array to your advantage using a binary search algorithm.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">binarySearch</span><span class="p">(</span> <span class="nx">sortedValues</span><span class="p">,</span> <span class="nx">target</span> <span class="p">){</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">search</span><span class="p">(</span> <span class="nx">low</span><span class="p">,</span> <span class="nx">high</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">low</span> <span class="o">&gt;</span> <span class="nx">high</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">sortedValues</span><span class="p">[</span><span class="nx">low</span><span class="p">]</span> <span class="o">===</span> <span class="nx">target</span> <span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">low</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">sortedValues</span><span class="p">[</span><span class="nx">high</span><span class="p">]</span> <span class="o">===</span> <span class="nx">target</span> <span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">high</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">middle</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span> <span class="p">(</span> <span class="nx">low</span> <span class="o">+</span> <span class="nx">high</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="p">);</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">middleElement</span> <span class="o">=</span> <span class="nx">sortedValues</span><span class="p">[</span><span class="nx">middle</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nx">middleElement</span> <span class="o">&gt;</span> <span class="nx">target</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">search</span><span class="p">(</span><span class="nx">low</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">middle</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="nx">middleElement</span> <span class="o">&lt;</span> <span class="nx">target</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">search</span><span class="p">(</span><span class="nx">middle</span><span class="p">,</span> <span class="nx">high</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">middle</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">search</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">sortedValues</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">binarySearch</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="mi">4</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On a simplified level, the Binary Search Algorithm takes the following steps:</p>
+
+<ol>
+<li>Find the middle element of the given array.</li>
+<li>Break out of the function if the bottom, middle or top element is your target.</li>
+<li>If the target is less than the middle element, call the function recursively passing in the left side of the array.</li>
+<li>If the target is greater than the middle element, call the function recursively passing in the right side of the array.</li>
+</ol>
+
+
+<h3>Puzzle Solving</h3>
+
+<p>Recursion is an incredibly powerful solution for both solving puzzles and finding the optimized solution for a puzzle. Let’s say you wanted to make an unbeatable version of a board game like Connect Four or Tic-Tac-Toe. An iterative solution could potentially be very complex, as there are a number of factors to consider before making your next move. However, you could determine which move is best through a recursive algorithm that considers all possible future outcomes of the game based on all possible combinations of valid moves by both players. If your game is too complex for an accurate iterative solution and well-defined enough to prevent infinite loops and memory issues, recursion is a powerful tool.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*P1_G06fONqGAa8YuOpXWUQ.png" alt="Recursive implementation of Tic-Tac-Toe" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MongoDB Relations]]></title>
+    <link href="http://pat-whitrock.github.io/blog/2014/05/07/mongodb-relations/"/>
+    <updated>2014-05-07T01:10:36-04:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/05/07/mongodb-relations</id>
+    <content type="html"><![CDATA[<p>Mongo’s relations are the NoSQL equivalent of associations found in relational databases. While serving a similar purpose and appearing similar in implementation, they do behave differently.</p>
+
+<h3>NoSQL relations vs RDBMS associations</h3>
+
+<p>Relations associate data from one model with data from another model. On a high level, this is precisely what RDBMS associations are for. However, the way in which data is associated in NoSQL is quite different.</p>
+
+<p>In traditional relational databases, associations are used to relate data from one table to another. MongoDB and similar NoSQL databases are document-oriented (there are no tables), so relationships are drawn between document-objects instead.</p>
+
+<h4>ActiveRecord</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:author</span>
+</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:comments</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Mongoid (referencing)</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:author</span>
+</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:comments</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Mongoid (embedding)</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">Mongoid</span><span class="p">:</span><span class="ss">:Document</span>
+</span><span class='line'>  <span class="n">embedded_in</span> <span class="ss">:author</span>
+</span><span class='line'>  <span class="n">embeds_many</span> <span class="ss">:comments</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All of the classes above implement basic one-to-many relationships in which an author has many posts and a post has many comments. One could say that <code>embedded_in</code> and <code>embeds_many</code> are the equivalent of <code>belongs_to</code> and <code>has_many</code>, but this would be an oversimplification.</p>
+
+<h3>ActiveRecord</h3>
+
+<p>Relational databases handle associations through the use of foreign keys referencing a unique row in another table. For example, a <code>post</code> would have an <code>author_id</code> referencing the ID of the record in the authors table to which it belongs. If an <code>author</code> has multiple <code>posts</code>, multiple post records would have the same <code>author_id</code>. Authors do not have <code>post_ids</code>.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*N--OFHhEC155ulYfHhPQGQ.png" alt="Relational database schema" /></p>
+
+<h3>Mongoid References</h3>
+
+<p>One way NoSQL databases handle one to many relationships is through references. Referencing is more similar to associations in relational databases than embedding (the pattern we will discuss next). References also utilize foreign keys, however they point from one document to another, rather than a record in one table to a record in another table.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// An author document.</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e9&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span> <span class="o">:</span> <span class="s2">&quot;Pat Whitrock&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// A post document.</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e0&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="s2">&quot;author_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e9&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span> <span class="o">:</span> <span class="s2">&quot;Mongo Stuff&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// A comment document.</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e8&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="s2">&quot;post_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e0&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="s2">&quot;content&quot;</span> <span class="o">:</span> <span class="s2">&quot;Lots of stuff about Mongo.&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Mongoid Embeds</h3>
+
+<p>Another way NoSQL databases handle this sort of one to many relationship is through embedding documents. One document is embedded within another, resulting in what is basically a giant hash. For example, the author document would embed many post documents and each post document would embed many comment documents. Each author document is a hash containing an array of post documents, each containing an array of comment documents.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// An author document.</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e9&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span> <span class="o">:</span> <span class="s2">&quot;Pat Whitrock&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;posts&quot;</span> <span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="c1">// An embedded post document.</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e0&quot;</span><span class="p">),</span>
+</span><span class='line'>      <span class="s2">&quot;name&quot;</span> <span class="o">:</span> <span class="s2">&quot;Mongo Stuff&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;comments&quot;</span> <span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="c1">// An embedded comment document.</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;4d3ed089fb60ab534684b7e8&quot;</span><span class="p">),</span>
+</span><span class='line'>          <span class="s2">&quot;content&quot;</span> <span class="o">:</span> <span class="s2">&quot;Lots of stuff about Mongo.&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Embedding vs Referencing</h3>
+
+<p>Why is it necessary for Mongo to have multiple ways of defining the same one to many relationship when ORMs like ActiveRecord require only one? Both embedding and referencing are valid options, but each caters more to specific use cases. There are a few things to consider before deciding.</p>
+
+<p>Will your data be referred to from multiple locations? If you need to access your data from multiple locations, you’re probably better off using references. If your data is only useful in relation to its parent document, embedding is the way to go.</p>
+
+<p>Also important to consider are data consistency and document size. MongoDB documents can are limited to a maximum size of 4MB, however it’s unlikely that this is a problem you would encounter early on.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Practical Uses for Closures]]></title>
+    <link href="http://pat-whitrock.github.io/blog/2014/04/29/practical-uses-for-closures/"/>
+    <updated>2014-04-29T00:58:30-04:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/04/29/practical-uses-for-closures</id>
+    <content type="html"><![CDATA[<p>The closure is a powerful tool in JavaScript. It is commonly used in functional programming languages, but often misunderstood. Like other JavaScript fundamentals, understanding closures is necessary to write expressive, concise and maintainable scripts.</p>
+
+<h3>What is a closure?</h3>
+
+<p>At first glance, a closure is simply a function defined within another function. However, the power of closures is derived from the fact that the inner function remembers the environment in which it was created. In other words, the inner function has access to the outer function’s variables and parameters.</p>
+
+<h3>What’s it look like?</h3>
+
+<p>Below is an example of a closure (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures">courtesy of Mozilla</a>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">pam</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Pam Beesly&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">displayName</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span> <span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">displayName</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">pam</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*fW56jkMiYfLxUUlf2L5Opw.png" alt="" /></p>
+
+<p>Our outer function — <code>pam</code> — does three things:</p>
+
+<ol>
+<li>Define a local variable, <code>name</code></li>
+<li>Define a function, <code>displayName</code></li>
+<li>Call <code>displayName</code></li>
+</ol>
+
+
+<p><code>displayName</code> doesn’t define any local variables, yet it is able to alert <code>name</code> because <code>name</code> has been defined in the scope in which the closure was created — that of its outer function.</p>
+
+<p>Closures can do more than just read their outer functions’ local variables — they can overwrite them, too. Observe below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">pam</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Pam Beesly&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">displayName</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span> <span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">setName</span><span class="p">(</span><span class="nx">newName</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">name</span> <span class="o">=</span> <span class="nx">newName</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">displayName</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">setName</span><span class="p">(</span><span class="s2">&quot;Pam Halpert&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">displayName</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">pam</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*fW56jkMiYfLxUUlf2L5Opw.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*NhY_TLbjc_hbkbYSG6viCw.png" alt="" /></p>
+
+<p>As we can see, closures are capable of not only reading, but also manipulating the variables of their outer functions.</p>
+
+<h3>Function factories</h3>
+
+<p>One powerful use of closures is to use the outer function as a factory for creating functions that are somehow related.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">dwightJob</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">prefix</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">title</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">sales</span> <span class="o">=</span> <span class="nx">dwightJob</span><span class="p">(</span><span class="s1">&#39;Salesman&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">manager</span> <span class="o">=</span> <span class="nx">dwightJob</span><span class="p">(</span><span class="s1">&#39;Manager&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">sales</span><span class="p">(</span><span class="s1">&#39;Top&#39;</span><span class="p">));</span>  <span class="c1">// Top Salesman</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">manager</span><span class="p">(</span><span class="s1">&#39;Assistant to the Regional&#39;</span><span class="p">));</span> <span class="c1">// Assistant to the Regional Manager</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">manager</span><span class="p">(</span><span class="s1">&#39;Regional&#39;</span><span class="p">));</span> <span class="c1">// Regional Manager</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*REtr4VND2YHsaeYQJ2uvBg.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*wMfr6N2kgKBLRIg6H4NqFw.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*_n7y7VVae0GGiQuWQMNAUw.png" alt="" /></p>
+
+<p>Using closures as function factories is a great way to keep your JavaScript DRY. Five powerful lines of code allow us to create any number of functions with similar, yet unique purposes.</p>
+
+<h3>Namespacing private functions</h3>
+
+<p>Many object-oriented languages provide the ability to declare methods as either public or private. JavaScript doesn’t have this functionality built in, but it does allow to emulate this functionality through the use of closures, which is known as the module pattern.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dwightSalary</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">salary</span> <span class="o">=</span> <span class="mi">60000</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">changeBy</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">salary</span> <span class="o">+=</span> <span class="nx">amount</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">raise</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">changeBy</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">lower</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">changeBy</span><span class="p">(</span><span class="o">-</span><span class="mi">5000</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">currentAmount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">salary</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">})();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">currentAmount</span><span class="p">());</span> <span class="c1">// $60,000</span>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">raise</span><span class="p">();</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">currentAmount</span><span class="p">());</span> <span class="c1">// $65,000</span>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">lower</span><span class="p">();</span>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">lower</span><span class="p">();</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">currentAmount</span><span class="p">());</span> <span class="c1">// $55,000</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">dwightSalary</span><span class="p">.</span><span class="nx">changeBy</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span> <span class="c1">// TypeError: undefined is not a function</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*qtX91lbv8K1--9UD52oVEQ.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*xuRESkZzYESnfTcnNgenPQ.png" alt="" />
+<img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*yneAbAbtw8cPkOq6Z4Yj5w.png" alt="" /></p>
+
+<p>Using closures to namespace private functions keeps more general namespaces clean, preventing naming collisions. Neither the <code>salary</code> variable nor the <code>changeBy</code> function are available outside of <code>dwightSalary</code>. However, <code>raise</code>, <code>lower</code> and <code>currentAmount</code> all have access to them and can be called on <code>dwightSalary</code>.</p>
+
+<p>These are a few popular uses for closures. You’ll surely encounter closures used for other purposes, but these are a couple simple ways to incorporate closures into your code in an immediately useful way.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[JavaScript Screenshots]]></title>
-    <link href="http://pat-whitrock.github.io/blog/2014/06/06/javascript-screenshots/"/>
-    <updated>2014-06-06T00:39:54-04:00</updated>
-    <id>http://pat-whitrock.github.io/blog/2014/06/06/javascript-screenshots</id>
+    <link href="http://pat-whitrock.github.io/blog/2014/04/28/javascript-screenshots/"/>
+    <updated>2014-04-28T00:39:54-04:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/04/28/javascript-screenshots</id>
     <content type="html"><![CDATA[<p>One of my current projects — <a href="http://www.gitshoes.com/%E2%80%8A%E2%80%94%E2%80%8Atakes%20on%20the%20important%20task%20of%20user%20feedback.%20I%20was%20able%20to%20build%20out%20the%20functionality%20of%20creating%20embeddable%20JavaScript%20feedback%20widgets%20pretty%20quickly.%20And%20getting%20them%20to%20submit%20issues%20to%20the%20correct%20GitHub%20repository%20through%20[Octokit](https://github.com/octokit/octokit.rb">GitShoes</a> was pretty straightforward. However, we quickly realized that users didn’t usually provide enough feedback for a developer to easily solve the problem. A few words (especially from a non-technical user) might not lead the developer to the root of the problem, so we decided to take things one step further.</p>
 
 <blockquote><p>“A picture is worth a thousand words.”</p></blockquote>
