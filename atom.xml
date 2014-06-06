@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[Rails Generate Rent]]></title>
   <link href="http://pat-whitrock.github.io/atom.xml" rel="self"/>
   <link href="http://pat-whitrock.github.io/"/>
-  <updated>2014-06-05T19:04:53-04:00</updated>
+  <updated>2014-06-05T20:49:52-04:00</updated>
   <id>http://pat-whitrock.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
-    
+    <name><![CDATA[Pat Whitrock]]></name>
+    <email><![CDATA[patrick.whitrock@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
