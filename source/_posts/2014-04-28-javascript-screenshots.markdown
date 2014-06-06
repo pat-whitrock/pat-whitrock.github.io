@@ -2,7 +2,7 @@
 layout: post
 title: "JavaScript Screenshots"
 subtitle: "User reconnaissance with HTML2Canvas"
-date: 2014-06-06 00:39:54 -0400
+date: 2014-04-28 00:39:54 -0400
 comments: true
 categories: 
 ---
