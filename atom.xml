@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Generate Rent]]></title>
   <link href="http://pat-whitrock.github.io/atom.xml" rel="self"/>
   <link href="http://pat-whitrock.github.io/"/>
-  <updated>2014-06-06T00:30:32-04:00</updated>
+  <updated>2014-06-06T00:54:04-04:00</updated>
   <id>http://pat-whitrock.github.io/</id>
   <author>
     <name><![CDATA[Pat Whitrock]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript Screenshots]]></title>
+    <link href="http://pat-whitrock.github.io/blog/2014/06/06/javascript-screenshots/"/>
+    <updated>2014-06-06T00:39:54-04:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/06/06/javascript-screenshots</id>
+    <content type="html"><![CDATA[<p>One of my current projects — <a href="http://www.gitshoes.com/%E2%80%8A%E2%80%94%E2%80%8Atakes%20on%20the%20important%20task%20of%20user%20feedback.%20I%20was%20able%20to%20build%20out%20the%20functionality%20of%20creating%20embeddable%20JavaScript%20feedback%20widgets%20pretty%20quickly.%20And%20getting%20them%20to%20submit%20issues%20to%20the%20correct%20GitHub%20repository%20through%20[Octokit](https://github.com/octokit/octokit.rb">GitShoes</a> was pretty straightforward. However, we quickly realized that users didn’t usually provide enough feedback for a developer to easily solve the problem. A few words (especially from a non-technical user) might not lead the developer to the root of the problem, so we decided to take things one step further.</p>
+
+<blockquote><p>“A picture is worth a thousand words.”</p></blockquote>
+
+<p>Our average issue was about 20-30 words long. So, if a picture is worth 1000 words, that means taking some quick screenshots at issue submission would make our app about 40x more useful. Seems like a no-brainer feature to me. But how do we make it happen?</p>
+
+<h3>Screenshots aren’t built into JavaScript</h3>
+
+<p>Well, that would have been convenient. Fortunately, HTML5 introduced the Canvas element. Here’s W3C’s explanation of the <a href="http://www.w3schools.com/html/html5_canvas.asp">Canvas</a> element:</p>
+
+<blockquote><p>The HTML5 &lt;canvas> element is used to draw graphics, on the fly, via scripting (usually JavaScript).
+The &lt;canvas> element is only a container for graphics. You must use a script to actually draw the graphics.</p></blockquote>
+
+<p>The canvas sounds like the perfect place for our screenshot to live, but how can we draw on it? I knew I couldn’t be the first person with a need for this, so I did what any reasonable developer would do: look to Open Source for a solution.</p>
+
+<h3>Enter HTML2Canvas</h3>
+
+<p><a href="https://github.com/niklasvh/html2canvas">HTML2Canvas</a> is an amazing JavaScript library by <a href="https://github.com/niklasvh">Niklas von Hertzen</a>. Here’s what you need to know about it:</p>
+
+<ul>
+<li><strong>HTML2Canvas is entirely client-side.</strong> Everything it does happens within your user’s browser, not on your server. This fact comes with its pros and cons. Pro: Repeatedly performing these operations on your own server would be very costly, but you don’t have to. Con: Your user’s browser environment is less reliable than your server’s. There’s a greater probability of something going wrong. You also need to send the image back in the form of a data url, which assumes a fairly powerful connection for the client.</li>
+<li><strong>HTML2Canvas is recreating elements</strong> from the page (or the whole page) from the DOM. You must have a canvas available on the page in which to store the elements you recreate.</li>
+<li><strong>HTML2Canvas only writes to the canvas.</strong> If you need to send your image somewhere, like your server, it’s up to you to handle that.</li>
+</ul>
+
+
+<h3>Writing to the canvas</h3>
+
+<p>The first step to consider is when you want your screenshot to be taken, likely either when the DOM is fully loaded or when something is clicked. For me, this was on clicking the widget, indicating you want to provide feedback. You’ll want to work within an event listener for that action.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div#gitshoes-button&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Your code goes here.</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, you must determine what you would like to take a screenshot of — the entire document or a select element. I chose to use the entire document.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div#gitshoes-button&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">html2canvas</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Your code goes here.</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, all that’s left is to tell HTML2Canvas where to place our newly canvased screenshot.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div#gitshoes-button&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">html2canvas</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">onrendered</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">canvas</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#gitshoesCanvas&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
+</span><span class='line'>            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">).</span><span class="nx">last</span><span class="p">()</span> <span class="o">\</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;display&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">)</span> <span class="o">\</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;gitshoesCanvas&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">formDiv</span><span class="p">.</span><span class="nx">slideDown</span><span class="p">();</span> <span class="cm">/* Ignore this line */</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the above code, I am doing a few things. First, I am removing any canvas I may have generated earlier in the pageview. Otherwise, each consecutive screenshot will take twice as long as the previous because it is recreating the existing canvas, even though it is hidden. Second, I am appending the newly created canvas to the body and applying CSS styles to hide it (so users don’t see a duplicate of their screen below) and make it easily findable. Lastly, I am revealing the feedback widget, but that isn’t relevant to the rest of the canvasing function. If you don’t need to hide your canvas or remove the existing canvas, you could get by without lines 4, 6, 7, 8 and the second half of line 5.</p>
+
+<h3>Converting the canvas to a data url</h3>
+
+<p>HTML is the language of the browser. If you plan on sending the screenshot back to your server or to a third-party, like AWS, it should be converted to something more manageable, like a data url (base64 encoded data). This is as simple as one line of code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">image_data_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">).</span><span class="nx">last</span><span class="p">()[</span><span class="mi">0</span><span class="p">].</span><span class="nx">toDataURL</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>What’s next?</h3>
+
+<p>The data url we created from the canvas is ready to be sent back to the server. Once you have the image on your server, there are countless things you can do with it. I chose to store it in a tempfile and upload it to AWS using <a href="https://github.com/fog/fog">Fog</a>, which is a great, lightweight cloud services gem, but that’s beyond the scope of this blog post. After being uploaded to AWS, the screenshots generated from the code above look like <a href="https://s3-us-west-2.amazonaws.com/gitshoes/screenshot20140423-49700-5aiovm.png">this</a>.</p>
+
+<h3>Go forth and take some screenshots!</h3>
+
+<p>For such a powerful tool, HTML2Canvas is relatively easy to implement.</p>
+
+<ul>
+<li>Check out the <a href="https://github.com/niklasvh/html2canvas">documentation</a></li>
+<li>Find a way to add value to one of your projects through screenshots</li>
+<li>Be responsible — don’t expose sensitive information from your users</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Spacing Out]]></title>
