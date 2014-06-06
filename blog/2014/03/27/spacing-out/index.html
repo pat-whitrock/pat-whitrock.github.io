@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Spacing Out - Rails Generate Rent</title>
+  <meta name="author" content="Pat Whitrock">
+
+  
+  <meta name="description" content="A couple weeks ago, I was scraping Wikipedia and hit a wall while I was parsing the data. I eventually traced my errors back to my parser, which was &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://pat-whitrock.github.io/blog/2014/03/27/spacing-out">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Generate Rent" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rails Generate Rent</a></h1>
+  
+    <h2>Pat Whitrock's Technical Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="patrick.whitrock@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:pat-whitrock.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Spacing Out</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-27T00:18:52-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A couple weeks ago, I was scraping Wikipedia and hit a wall while I was parsing the data. I eventually traced my errors back to my parser, which was failing to split a string on a space I knew should be present in each iteration. I dug further, and eventually isolated the iteration causing the failure. I copy and pasted the string into IRB to test the split myself and, as expected, the string couldn’t be split on the space. <em>But the space did exist</em>. It was there. I could see it. I tried writing the same string out by hand and splitting it. That worked.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/1000/1*O7CIpHjHmv7AvIY6n1izdA.png" alt="My brain is full of fuck" /></p>
+
+<p>Did that not make any sense? Download this <a href="https://gist.github.com/pat-whitrock/9776536#file-encodings">gist</a> and try running the commands in IRB, PRY. They’re identical commands, but with different return values. If we’re splitting the same string on a space and getting different return values, it can only mean one thing — one of the spaces isn’t a space. But it’s clearly a space… I can see it. It’s a space. So, the real question is this…</p>
+
+<h3>When is a space not a space?</h3>
+
+<p>A space is a space is a space, right? Wrong. There are lots of types of spaces. And when my representation of a space is different from your representation of a space, the world explodes (or we can’t split strings). The reason I couldn’t split my string is the same fundamental reason you’re periodically annoyed by weird characters like �.</p>
+
+<p>Different coded character sets are encoded differently. Computers outdate the internet, so character encoding wasn’t designed with interlingual string transfer in mind. Instead, we developed encoding standards optimized for our cultural contexts. In the realm of character encoding, these cultural contexts are referred to as <strong>character sets</strong>. For example, the the standard English characters we are accustomed to are of a different character set than that of the Spanish language or Chinese.</p>
+
+<p>We developed different <strong>coded character sets</strong> for these different cultural contexts without the foresight that we might one day want to exchange information with each other through strings on such a massive scale. A coded character set is basically the combination of character codes and their respective characters.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/600/1*djp9tqvUr9wA5lPw31lALQ.gif" alt="ASCII / American Standard Code for Information Interchange" /></p>
+
+<p>ASCII became the American standard for encoding the characters we used. It could store all the needed characters in 7 bits, leaving a convenient 8th bit of <strong>character encodings</strong> for you to do weird stuff with, like make your computer beep at innocent bypassers.</p>
+
+<p>Everyone else developed their own encoding standards for their language’s character set. There were even multiple coded character sets for the same real-life character set. Eventually, the west agreed on the ANSI standard, so we were clear on what the first 128 of 256 8-bit characters would represent, but left the remaining 128 for customization. However, Asian languages with exponentially more characters were never going to be able to fit their character sets within 8 bits, so they went down a completely different path.</p>
+
+<h3>One encoding standard to rule them all</h3>
+
+<p>Enter Unicode. The Unicode consortium sought to create a single character set including all of the world’s writing systems (and Klingon). The Unicode standard consists of a set of code charts for visual reference, an encoding method, set of standard <a href="http://en.wikipedia.org/wiki/Character_encoding">character encodings</a> and a set of reference data <a href="http://en.wikipedia.org/wiki/Computer_file">computer files</a>.</p>
+
+<p>Unicode gave birth to the most commonly used character encodings in use today, most notably <strong>UTF-8</strong>. UTF-8 encodes ASCII characters in one byte, with the same codes used by ASCII. Its remaining characters are encoded using up to 4 bytes.</p>
+
+<h3>Back to the spaces</h3>
+
+<p>After doing some research, I stumbled upon a super helpful method for inspecting seemingly identical strings: <strong>codepoints</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;Hello world&quot;</span><span class="o">.</span><span class="n">codepoints</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">72</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">100</span><span class="o">]</span>
+</span><span class='line'><span class="s2">&quot;Hello world&quot;</span><span class="o">.</span><span class="n">codepoints</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">72</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">100</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice the difference? When you split a string on a space, you’re splitting on the integer ordinal of 32. For some strange reason, Wikipedia formatted one of 3,000 datapoints with a unicode non-breaking space, also known as integer ordinal 160. Why? So I could share this valuable learning experience with you, of course!</p>
+
+<h3>Takeaways</h3>
+
+<ol>
+<li>Sometimes characters act differently than you would expect. In actuality, they might not be the same characters you think they are. Impostors!!!</li>
+<li>Characters can’t lie to codepoints. Make them show their true selves if they’re acting shady.</li>
+<li>If it looks like a space, but doesn’t act like a space, try this:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;Hello world&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sr">/[[:space:]]/</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*2JDxyN3qdMoMx8WYDafyaQ.png" alt="Knowledge!" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Pat Whitrock</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-27T00:18:52-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://pat-whitrock.github.io/blog/2014/03/27/spacing-out/" data-via="@DIS_IS_PATRICK" data-counturl="http://pat-whitrock.github.io/blog/2014/03/27/spacing-out/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/12/customizing-actionview/" title="Previous Post: Customizing ActionView">&laquo; Customizing ActionView</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/27/spacing-out/">Spacing Out</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/12/customizing-actionview/">Customizing ActionView</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/27/git-for-non-programmers/">Git for Non-Programmers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/13/the-logic-behind-logical-operators/">The Logic Behind Logical Operators</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/pat-whitrock">@pat-whitrock</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'pat-whitrock',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100464323688509937290?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Pat Whitrock -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
