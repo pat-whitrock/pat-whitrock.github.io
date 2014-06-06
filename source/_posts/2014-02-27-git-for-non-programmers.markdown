@@ -65,4 +65,4 @@ Github’s pull request interface is amazing. Unfortunately, you can’t preview
 
 Should I just timestamp a bunch of files, throw them in folders and email everyone I work with?
 
-<iframe width="625" height="480" src="//www.youtube.com/embed/31g0YE61PLQ" frameborder="0" allowfullscreen></iframe>
+<iframe width="770" height="480" src="//www.youtube.com/embed/31g0YE61PLQ" frameborder="0" allowfullscreen></iframe>
