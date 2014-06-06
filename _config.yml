@@ -4,10 +4,10 @@
 
 url: http://pat-whitrock.github.io
 title: Rails Generate Rent
-subtitle: Pat Whitrock's Technical Blog
+subtitle: Thoughts on building Internets
 author: Pat Whitrock
 simple_search: https://www.google.com/search
-description: Pat Whitrock's thoughts on Ruby, Javascript and the Internets at large.
+description: I'm a musician turned full-stack developer living in NYC. Before studying code at <a href="http://flatironschool.com/">The Flatiron School</a> I attended <a href="http://www.nyu.edu/">NYU</a> and worked at music startups like <a href="https://www.nextbigsound.com/">Next Big Sound</a> and <a href="https://www.songtrust.com/">Songtrust</a>. I care about creating innovative products with great user experiences.
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -17,9 +17,12 @@ date_format: "ordinal"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
 subscribe_rss: /atom.xml
-subscribe_email: patrick.whitrock@gmail.com
+subscribe_email:
 # RSS feeds can list your email address if you like
 email: patrick.whitrock@gmail.com
+
+# Gravatar email
+gravatar_email: patrick.whitrock@gmail.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -69,11 +72,14 @@ github_show_profile_link: true
 github_skip_forks: true
 
 # Twitter
-twitter_user: '@DIS_IS_PATRICK'
+twitter_user: 'DIS_IS_PATRICK'
 twitter_tweet_button: true
 
+# LinkedIn
+linkedin_user: patrickwhitrock
+
 # Google +1
-google_plus_one: false
+google_plus_one: true
 google_plus_one_size: medium
 
 # Google Plus Profile
@@ -90,11 +96,11 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: patwhitrock
 disqus_show_comment_count: false
 
 # Google Analytics
 google_analytics_tracking_id:
 
 # Facebook Like
-facebook_like: false
+facebook_like: true
