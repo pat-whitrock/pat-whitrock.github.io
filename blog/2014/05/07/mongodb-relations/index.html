@@ -3,13 +3,17 @@
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>MongoDB Relations - Rails Generate Rent</title>
   <meta name="author" content="Pat Whitrock">
 
   
-  <meta name="description" content="Mongo’s relations are the NoSQL equivalent of associations found in relational databases. While serving a similar purpose and appearing similar in &hellip;">
+  <meta name="description" content="MongoDB Relations written May 7th, 2014 Mongo’s relations are the NoSQL equivalent of associations found in relational databases. While serving a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,55 +30,22 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
   
 
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Rails Generate Rent</a></h1>
-  
-    <h2>Pat Whitrock's Technical Blog</h2>
-  
-</hgroup>
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-    <li><a href="patrick.whitrock@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:pat-whitrock.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">MongoDB Relations</h1>
-    
-    
-      <p class="meta">
-        
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>MongoDB Relations</h1>
+        <div class="meta">
+          written 
 
 
 
@@ -84,22 +55,24 @@
 
 
   
+
 
 
 <time datetime="2014-05-07T01:10:36-04:00" pubdate data-updated="true">May 7<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
+          
 
 
-<div class="entry-content"><p>Mongo’s relations are the NoSQL equivalent of associations found in relational databases. While serving a similar purpose and appearing similar in implementation, they do behave differently.</p>
+        </div>
+        <p>Mongo’s relations are the NoSQL equivalent of associations found in relational databases. While serving a similar purpose and appearing similar in implementation, they do behave differently.</p>
 
 <h3>NoSQL relations vs RDBMS associations</h3>
 
 <p>Relations associate data from one model with data from another model. On a high level, this is precisely what RDBMS associations are for. However, the way in which data is associated in NoSQL is quite different.</p>
 
 <p>In traditional relational databases, associations are used to relate data from one table to another. MongoDB and similar NoSQL databases are document-oriented (there are no tables), so relationships are drawn between document-objects instead.</p>
+
+<!--more-->
+
 
 <h4>ActiveRecord</h4>
 
@@ -249,160 +222,75 @@
 <p>Will your data be referred to from multiple locations? If you need to access your data from multiple locations, you’re probably better off using references. If your data is only useful in relation to its parent document, embedding is the way to go.</p>
 
 <p>Also important to consider are data consistency and document size. MongoDB documents can are limited to a maximum size of 4MB, however it’s unlikely that this is a problem you would encounter early on.</p>
+
+
+        <hr class="divider-short"/>
+        
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Pat Whitrock</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-07T01:10:36-04:00" pubdate data-updated="true">May 7<span>th</span>, 2014</time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://pat-whitrock.github.io/blog/2014/05/07/mongodb-relations/" data-via="@DIS_IS_PATRICK" data-counturl="http://pat-whitrock.github.io/blog/2014/05/07/mongodb-relations/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/04/29/practical-uses-for-closures/" title="Previous Post: Practical Uses for Closures">&laquo; Practical Uses for Closures</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/05/08/practical-uses-for-recursive-javascript/" title="Next Post: Practical Uses for Recursive Javascript">Practical Uses for Recursive Javascript &raquo;</a>
-      
-    </p>
-  </footer>
+        </section>
+        
+      </div>
+    </div>
+  </div>
 </article>
 
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2014/04/29/practical-uses-for-closures/" title="Previous Post: Practical Uses for Closures">&laquo; Previous: Practical Uses for Closures</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2014/05/08/practical-uses-for-recursive-javascript/" title="Next Post: Practical Uses for Recursive Javascript">Next: Practical Uses for Recursive Javascript &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
 </div>
 
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
     
-      <li class="post">
-        <a href="/blog/2014/05/08/practical-uses-for-recursive-javascript/">Practical Uses for Recursive Javascript</a>
-      </li>
+    <a href="https://twitter.com/DIS_IS_PATRICK"><img src="/images/glyphicons_social_31_twitter.png"/></a>
     
-      <li class="post">
-        <a href="/blog/2014/05/07/mongodb-relations/">MongoDB Relations</a>
-      </li>
+
     
-      <li class="post">
-        <a href="/blog/2014/04/29/practical-uses-for-closures/">Practical Uses for Closures</a>
-      </li>
+    <a href="https://github.com/pat-whitrock"><img src="/images/glyphicons_social_21_github.png"/></a>
     
-      <li class="post">
-        <a href="/blog/2014/04/28/javascript-screenshots/">JavaScript Screenshots</a>
-      </li>
+
     
-      <li class="post">
-        <a href="/blog/2014/03/27/spacing-out/">Spacing Out</a>
-      </li>
+    <a href="https://linkedin.com/in/patrickwhitrock"><img src="/images/glyphicons_social_17_linked_in.png"/></a>
     
-  </ul>
-</section>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
-  </ul>
-  
-  <a href="https://github.com/pat-whitrock">@pat-whitrock</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
+    
+    <a href="mailto:patrick.whitrock@gmail.com"><img src="/images/glyphicons_social_39_e-mail.png"/></a>
+    
+  </div>
+</div>
 
-        github.showRepos({
-            user: 'pat-whitrock',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/100464323688509937290?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
 
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Pat Whitrock -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
 </footer>
-  
 
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+  </body>
 </html>

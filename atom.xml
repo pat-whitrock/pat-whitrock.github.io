@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Generate Rent]]></title>
   <link href="http://pat-whitrock.github.io/atom.xml" rel="self"/>
   <link href="http://pat-whitrock.github.io/"/>
-  <updated>2014-06-06T01:29:41-04:00</updated>
+  <updated>2014-06-06T13:29:40-04:00</updated>
   <id>http://pat-whitrock.github.io/</id>
   <author>
     <name><![CDATA[Pat Whitrock]]></name>
@@ -23,6 +23,9 @@
 <h3>How not to use recursion</h3>
 
 <p>If used incorrectly, recursion can be dangerous. Not all problems are meant to be solved recursively. Common pitfalls include infinite loops (if you fail to provide termination conditions), memory errors and stack overflows (if the function is deep and memory intensive). All of these issues are avoidable if you follow one rule: don’t use recursion for the sake of using recursion. In addition to the pitfalls above, irresponsible use of recursion can be much slower and more cryptic than iterative solutions.</p>
+
+<!--more-->
+
 
 <h3>When to use recursion</h3>
 
@@ -162,6 +165,9 @@
 <p>Relations associate data from one model with data from another model. On a high level, this is precisely what RDBMS associations are for. However, the way in which data is associated in NoSQL is quite different.</p>
 
 <p>In traditional relational databases, associations are used to relate data from one table to another. MongoDB and similar NoSQL databases are document-oriented (there are no tables), so relationships are drawn between document-objects instead.</p>
+
+<!--more-->
+
 
 <h4>ActiveRecord</h4>
 
@@ -348,6 +354,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<!--more-->
+
+
 <p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*fW56jkMiYfLxUUlf2L5Opw.png" alt="" /></p>
 
 <p>Our outer function — <code>pam</code> — does three things:</p>
@@ -514,6 +523,9 @@
 
 <p>Our average issue was about 20-30 words long. So, if a picture is worth 1000 words, that means taking some quick screenshots at issue submission would make our app about 40x more useful. Seems like a no-brainer feature to me. But how do we make it happen?</p>
 
+<!--more-->
+
+
 <h3>Screenshots aren’t built into JavaScript</h3>
 
 <p>Well, that would have been convenient. Fortunately, HTML5 introduced the Canvas element. Here’s W3C’s explanation of the <a href="http://www.w3schools.com/html/html5_canvas.asp">Canvas</a> element:</p>
@@ -624,6 +636,9 @@ The &lt;canvas> element is only a container for graphics. You must use a script 
     <id>http://pat-whitrock.github.io/blog/2014/03/27/spacing-out</id>
     <content type="html"><![CDATA[<p>A couple weeks ago, I was scraping Wikipedia and hit a wall while I was parsing the data. I eventually traced my errors back to my parser, which was failing to split a string on a space I knew should be present in each iteration. I dug further, and eventually isolated the iteration causing the failure. I copy and pasted the string into IRB to test the split myself and, as expected, the string couldn’t be split on the space. <em>But the space did exist</em>. It was there. I could see it. I tried writing the same string out by hand and splitting it. That worked.</p>
 
+<!--more-->
+
+
 <p><img src="https://d262ilb51hltx0.cloudfront.net/max/1000/1*O7CIpHjHmv7AvIY6n1izdA.png" alt="My brain is full of fuck" /></p>
 
 <p>Did that not make any sense? Download this <a href="https://gist.github.com/pat-whitrock/9776536#file-encodings">gist</a> and try running the commands in IRB, PRY. They’re identical commands, but with different return values. If we’re splitting the same string on a space and getting different return values, it can only mean one thing — one of the spaces isn’t a space. But it’s clearly a space… I can see it. It’s a space. So, the real question is this…</p>
@@ -695,6 +710,9 @@ The &lt;canvas> element is only a container for graphics. You must use a script 
 <h2>ActionView::Helpers</h2>
 
 <p>If you’re developing a Rails application, you’ll most likely be making use of ActionView helpers within your templates. Rails will also be utilizing these helpers to create associations between different parts of your application based solely on naming conventions. ActionView is largely responsible for the power of the Rails framework that is provided by prioritizing convention over customization.</p>
+
+<!--more-->
+
 
 <h3>Pluralization is awesome</h3>
 
@@ -845,6 +863,9 @@ The &lt;canvas> element is only a container for graphics. You must use a script 
     <id>http://pat-whitrock.github.io/blog/2014/02/27/git-for-non-programmers</id>
     <content type="html"><![CDATA[<p>Git is an amazing tool for collaboration and version control, but its merits are largely unknown to the general public. Over the past few years, amazing collaborative tools (e.g. Google Drive) have become popular for word processing, spreadsheets and other common needs for the average person. However, these tools don’t offer sophisticated version control — they are limited to moving linearly backwards and forwards a certain number of steps.</p>
 
+<!--more-->
+
+
 <p>This limits our ability to create different versions of the same document to test different approaches to a problem or work on the same content at the same time without stepping on each other’s feet or creating entirely new files. Any non-developer who has worked in a normal office setting has probably encountered a project that quickly devolved into folders containing timestamped versions of the same file. If you’re like me, you probably thought putting that on a shared drive in the cloud put you one step ahead of the game. Sadly, that’s probably true, but that’s no excuse not to step up your game some more with Git. That’s right — Git can handle more than just code.</p>
 
 <p>This may seem like a crazy idea — Git wasn’t created to handle spreadsheets or word processing. Well, you know what sounds even crazier? Having a ton of folders with timestamped files on everyone’s hard drive! Using <code>git add</code>, <code>commit</code>, <code>branch</code>, <code>merge</code> and <code>push</code> is simple to learn and comes with a number of added benefits.</p>
@@ -916,6 +937,9 @@ The &lt;canvas> element is only a container for graphics. You must use a script 
 <h3>So what’s the difference?</h3>
 
 <p><strong>Precedence</strong>. Huh? Precedence is the same as <strong>Order of Operations</strong>. Remember <strong>PEMDAS</strong> from grade school? It’s that acronym for <strong>P</strong>arentheses, <strong>E</strong>xponents, <strong>M</strong>ultiplication, <strong>D</strong>ivision, <strong>A</strong>ddition, <strong>S</strong>ubtraction. The operators at the beginning of <strong>PEMDAS</strong> (parentheses) are considered first, then the next (exponents), and so on. Operator precedence in Ruby and other programming languages works the same way — there are just more operators. Got it? Got it. Moving on…</p>
+
+<!--more-->
+
 
 <p><code>&amp;&amp;</code> and <code>||</code> have a higher precedence than <em>and</em> and <em>or</em>. This means Ruby will consider them first. Seems kind of harmless as long as we’re not mixing the two sets of operators (e.g. using <code>&amp;&amp;</code> and <code>or</code>) in the same expression, but the real problem doesn’t lie at either of these levels of precedence. The troublesome area is the space between.</p>
 
