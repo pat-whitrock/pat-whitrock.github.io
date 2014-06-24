@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Generate Rent]]></title>
   <link href="http://pat-whitrock.github.io/atom.xml" rel="self"/>
   <link href="http://pat-whitrock.github.io/"/>
-  <updated>2014-06-06T16:48:15-04:00</updated>
+  <updated>2014-06-24T00:05:15-04:00</updated>
   <id>http://pat-whitrock.github.io/</id>
   <author>
     <name><![CDATA[Pat Whitrock]]></name>
@@ -12,6 +12,93 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lucas Uses Venmo, I Use Transactions]]></title>
+    <link href="http://pat-whitrock.github.io/blog/2014/06/23/lucas-uses-venmo-i-use-transactions/"/>
+    <updated>2014-06-23T23:33:30-04:00</updated>
+    <id>http://pat-whitrock.github.io/blog/2014/06/23/lucas-uses-venmo-i-use-transactions</id>
+    <content type="html"><![CDATA[<p>Transactions allow us to execute batches of SQL operations either in their entirety or not at all. While this may seem simple, it is an incredibly powerful tool that solves incredibly important real world problems.</p>
+
+<h3>What are SQL transactions?</h3>
+
+<p>A transaction is a group of related SQL statements that will either be committed or rolled back, depending on whether the statements within perform as expected. Generally, SQL statements are implicitly committed to the database. Transactions commit statements to the database explicitly, allowing several related statements to be committed all at once or not at all. What&rsquo;s the benefit? If two statements must occur concurrently, for example a transaction between individuals, non-transactional SQL runs the risk of implicitly committing the first before the second fails. If the statements are wrapped in one transaction, this can&rsquo;t happen.</p>
+
+<p>Let&rsquo;s look at an example. My friend Lucas and I go to a bar. He pays for the drinks and requests $6 (because NYC bars are exorbitantly pricey).</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*DXkL2kLAP69hs4Cvzt7H0g.jpeg" alt="Lucas buys a round" /></p>
+
+<!--more-->
+
+
+<h4>Venmo without transactions</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UPDATE Users
+</span><span class='line'>SET balance = CASE name
+</span><span class='line'>WHEN 'Lucas' THEN balance + 6
+</span><span class='line'>WHEN 'Pat' THEN balance — 6
+</span><span class='line'>END</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Most of the time, this will work fine. However, if the second operation throws an error (for example, if my balance is below $6 and cannot fall below 0), the first has already occurred. Venmo has just deposited $6 into Lucas&#8217; account, but failed to withdraw it from mine. If Venmo failed to account for this, its users would surely be gifting each other money out of thin air all the time.</p>
+
+<h4>Venmo with transactions</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>BEGIN TRANSACTION
+</span><span class='line'>UPDATE Users
+</span><span class='line'>SET balance = CASE name
+</span><span class='line'>WHEN 'Lucas' THEN balance + 6
+</span><span class='line'>WHEN 'Pat' THEN balance — 6
+</span><span class='line'>END
+</span><span class='line'>COMMIT TRANSACTION</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Venmo can avoid the ramifications of the edge case described above through a simple SQL transaction. By grouping the statements together in a batch, the deposit into Lucas&#8217; account will only occur if the withdrawal of my account is successful and vice versa.</p>
+
+<h3>Transactions in Rails</h3>
+
+<p>The benefit of transactions is clear, but writing complex SQL statements throughout an app isn&rsquo;t fun. Most Rubyists would prefer to rely on Rails (more specifically, ActiveRecord) for this sort of thing. Thankfully, ActiveRecord::Base has transaction processing baked right in!</p>
+
+<p>Here&rsquo;s how it works:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">transaction</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">lucas</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">pat</span><span class="o">.</span><span class="n">withdraw</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Isn&rsquo;t that easy? I know, this is a simple example, but thanks to some nifty programming transactions are extremely flexible. We used transaction as a class method on our User model, but it is available on ActiveRecord::Base itself and all classes and instances inheriting from it. You can even perform operations on instances of multiple ActiveRecord classes within a single transaction. The only exception to this would be if the classes have separate database connections.</p>
+
+<h3>Anti-patterns to avoid</h3>
+
+<h4>Single record transactions</h4>
+
+<p>Wrapping a single database operation in a transaction is pointless. There are no other operations within the transaction that will experience complications should this transaction throw an error. Either your transaction is missing another operation or the transaction is superfluous.</p>
+
+<h4>Using “exception-less” methods</h4>
+
+<p>ActiveRecord will rollback a transaction if one of the methods within the transaction block returns an error. A common mistake is to use methods like save and destroy, which return a boolean false upon failure. This will not cause the transaction to rollback. The save! and destroy! methods will return an error upon failure and should be used instead.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/792/1*ptFKIJGqxyFCYPRN9gQVcg.png" alt="Lucas uses SQL transactions in his Rails app!" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Practical Uses for Recursive Javascript]]></title>

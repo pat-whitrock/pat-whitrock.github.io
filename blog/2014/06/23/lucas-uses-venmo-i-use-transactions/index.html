@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Lucas Uses Venmo, I Use Transactions - Rails Generate Rent</title>
+  <meta name="author" content="Pat Whitrock">
+
+  
+  <meta name="description" content="Lucas Uses Venmo, I Use Transactions written Jun 23rd, 2014 Transactions allow us to execute batches of SQL operations either in their entirety or &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://pat-whitrock.github.io/blog/2014/06/23/lucas-uses-venmo-i-use-transactions">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Generate Rent" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Lucas Uses Venmo, I Use Transactions</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-06-23T23:33:30-04:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2014</time>
+          
+
+
+        </div>
+        <p>Transactions allow us to execute batches of SQL operations either in their entirety or not at all. While this may seem simple, it is an incredibly powerful tool that solves incredibly important real world problems.</p>
+
+<h3>What are SQL transactions?</h3>
+
+<p>A transaction is a group of related SQL statements that will either be committed or rolled back, depending on whether the statements within perform as expected. Generally, SQL statements are implicitly committed to the database. Transactions commit statements to the database explicitly, allowing several related statements to be committed all at once or not at all. What&rsquo;s the benefit? If two statements must occur concurrently, for example a transaction between individuals, non-transactional SQL runs the risk of implicitly committing the first before the second fails. If the statements are wrapped in one transaction, this can&rsquo;t happen.</p>
+
+<p>Let&rsquo;s look at an example. My friend Lucas and I go to a bar. He pays for the drinks and requests $6 (because NYC bars are exorbitantly pricey).</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*DXkL2kLAP69hs4Cvzt7H0g.jpeg" alt="Lucas buys a round" /></p>
+
+<!--more-->
+
+
+<h4>Venmo without transactions</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>UPDATE Users
+</span><span class='line'>SET balance = CASE name
+</span><span class='line'>WHEN 'Lucas' THEN balance + 6
+</span><span class='line'>WHEN 'Pat' THEN balance — 6
+</span><span class='line'>END</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Most of the time, this will work fine. However, if the second operation throws an error (for example, if my balance is below $6 and cannot fall below 0), the first has already occurred. Venmo has just deposited $6 into Lucas&#8217; account, but failed to withdraw it from mine. If Venmo failed to account for this, its users would surely be gifting each other money out of thin air all the time.</p>
+
+<h4>Venmo with transactions</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>BEGIN TRANSACTION
+</span><span class='line'>UPDATE Users
+</span><span class='line'>SET balance = CASE name
+</span><span class='line'>WHEN 'Lucas' THEN balance + 6
+</span><span class='line'>WHEN 'Pat' THEN balance — 6
+</span><span class='line'>END
+</span><span class='line'>COMMIT TRANSACTION</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Venmo can avoid the ramifications of the edge case described above through a simple SQL transaction. By grouping the statements together in a batch, the deposit into Lucas&#8217; account will only occur if the withdrawal of my account is successful and vice versa.</p>
+
+<h3>Transactions in Rails</h3>
+
+<p>The benefit of transactions is clear, but writing complex SQL statements throughout an app isn&rsquo;t fun. Most Rubyists would prefer to rely on Rails (more specifically, ActiveRecord) for this sort of thing. Thankfully, ActiveRecord::Base has transaction processing baked right in!</p>
+
+<p>Here&rsquo;s how it works:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">transaction</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">lucas</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">pat</span><span class="o">.</span><span class="n">withdraw</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Isn&rsquo;t that easy? I know, this is a simple example, but thanks to some nifty programming transactions are extremely flexible. We used transaction as a class method on our User model, but it is available on ActiveRecord::Base itself and all classes and instances inheriting from it. You can even perform operations on instances of multiple ActiveRecord classes within a single transaction. The only exception to this would be if the classes have separate database connections.</p>
+
+<h3>Anti-patterns to avoid</h3>
+
+<h4>Single record transactions</h4>
+
+<p>Wrapping a single database operation in a transaction is pointless. There are no other operations within the transaction that will experience complications should this transaction throw an error. Either your transaction is missing another operation or the transaction is superfluous.</p>
+
+<h4>Using “exception-less” methods</h4>
+
+<p>ActiveRecord will rollback a transaction if one of the methods within the transaction block returns an error. A common mistake is to use methods like save and destroy, which return a boolean false upon failure. This will not cause the transaction to rollback. The save! and destroy! methods will return an error upon failure and should be used instead.</p>
+
+<p><img src="https://d262ilb51hltx0.cloudfront.net/max/792/1*ptFKIJGqxyFCYPRN9gQVcg.png" alt="Lucas uses SQL transactions in his Rails app!" /></p>
+
+
+        <hr class="divider-short"/>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2014/05/08/practical-uses-for-recursive-javascript/" title="Previous Post: Practical Uses for Recursive Javascript">&laquo; Previous: Practical Uses for Recursive Javascript</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    
+    <a href="https://twitter.com/DIS_IS_PATRICK"><img src="/images/glyphicons_social_31_twitter.png"/></a>
+    
+
+    
+    <a href="https://github.com/pat-whitrock"><img src="/images/glyphicons_social_21_github.png"/></a>
+    
+
+    
+    <a href="https://linkedin.com/in/patrickwhitrock"><img src="/images/glyphicons_social_17_linked_in.png"/></a>
+    
+
+    
+    <a href="mailto:patrick.whitrock@gmail.com"><img src="/images/glyphicons_social_39_e-mail.png"/></a>
+    
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
